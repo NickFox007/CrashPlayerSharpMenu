@@ -11,7 +11,7 @@ namespace CrashPlayerSharpMenu;
 public class CrashPlayerSharpMenu : BasePlugin
 {
     public override string ModuleName => "CrashPlayer CSharp AdminMenu [Module]";
-    public override string ModuleVersion => "0.2";
+    public override string ModuleVersion => "0.3";
 
     private IMenuApi? _menu_api;
     private ICrashPlayerApi? _cpc_api;
@@ -38,7 +38,6 @@ public class CrashPlayerSharpMenu : BasePlugin
         return true;
     }
 
-    /* TEST COMMAND */
     [RequiresPermissions("@css/root")]
     [ConsoleCommand("css_crash", "Crash choosen player!")]
     [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)]
@@ -49,7 +48,6 @@ public class CrashPlayerSharpMenu : BasePlugin
         foreach (var target in Utilities.GetPlayers())
             if (CheckPlayer(target))
                 menu.AddMenuOption(target.PlayerName, (player, option) => { callback(target);});
-
         menu.Open(player);
         
     }
@@ -59,7 +57,6 @@ public class CrashPlayerSharpMenu : BasePlugin
         if (player.IsValid && player.Connected == PlayerConnectedState.PlayerConnected && !player.IsBot) return true;
         else return false;
     }
-    /* TEST COMMAND */
 
 
 }
