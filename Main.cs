@@ -11,7 +11,7 @@ namespace CrashPlayerSharpMenu;
 public class CrashPlayerSharpMenu : BasePlugin
 {
     public override string ModuleName => "CrashPlayer CSharp AdminMenu [Module]";
-    public override string ModuleVersion => "0.3";
+    public override string ModuleVersion => "0.4";
 
     private IMenuApi? _menu_api;
     private ICrashPlayerApi? _cpc_api;
@@ -23,17 +23,16 @@ public class CrashPlayerSharpMenu : BasePlugin
     {
         _menu_api = _pluginMenu.Get();
         _cpc_api = _pluginCPC.Get();
-        //if (_cpc_api == null || _menu_api == null) return;
     }
 
 
-    bool callback(CCSPlayerController player)
+    bool callback(CCSPlayerController player, CCSPlayerController target)
     {
         
         if (!player.Equals(null))
         {
-            _cpc_api.CPC_CrashPlayer(player);
-            player.PrintToChat("Крашим игрока " + player.PlayerName);
+            _cpc_api.CPC_CrashPlayer(target);
+            player.PrintToChat("Крашим игрока " + target.PlayerName);
         }
         return true;
     }
@@ -42,14 +41,12 @@ public class CrashPlayerSharpMenu : BasePlugin
     [ConsoleCommand("css_crash", "Crash choosen player!")]
     [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)]
     public void OnCommand(CCSPlayerController? player, CommandInfo command)
-    {
-        
+    {        
         var menu = _menu_api.NewMenu("CrashMenu");
         foreach (var target in Utilities.GetPlayers())
             if (CheckPlayer(target))
-                menu.AddMenuOption(target.PlayerName, (player, option) => { callback(target);});
-        menu.Open(player);
-        
+                menu.AddMenuOption(target.PlayerName, (player, option) => { callback(player, target);});
+        menu.Open(player);        
     }
 
     private bool CheckPlayer(CCSPlayerController player)
